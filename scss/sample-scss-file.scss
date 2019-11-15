@@ -1,0 +1,22 @@
+#test {
+  .hello {
+    color: white;
+
+    .deeper {
+      // comment
+      .more,
+      .test {
+        color: red;
+      }
+
+      color: rgba(0, 0, 0, 0.5);
+      height: 100%;
+      //comment here
+
+      width: 100%;
+      content: '';
+      border: 0;
+      /* Single-line comment */
+    }
+  }
+}
