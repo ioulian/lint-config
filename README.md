@@ -20,7 +20,7 @@ When the dependency has been installed, run:
 yarn linting install
 ```
 
-This will install all linting configs for you and update `package.json` with scripts.
+This will install all linting configs for you and update `package.json` with scripts. You can lint and fix your code with them.
 
 ### Installing (Manual)
 

@@ -86,8 +86,8 @@ const addScriptsToPackageJson = message => {
     json.scripts['eslint:fix:js'] = "eslint --fix 'src/js/**/*.js'"
     json.scripts['eslint:lint:ts'] = "eslint 'src/ts/**/*.ts'"
     json.scripts['eslint:fix:ts'] = "eslint --fix 'src/ts/**/*.ts'"
-    json.scripts['stylelint:lint'] = "stylelint 'src/scss/**/*.scss'"
-    json.scripts['stylelint:fix'] = "stylelint --fix 'src/scss/**/*.scss'"
+    json.scripts['stylelint:lint:scss'] = "stylelint 'src/scss/**/*.scss'"
+    json.scripts['stylelint:fix:scss'] = "stylelint --fix 'src/scss/**/*.scss'"
     json.scripts['prettier:lint'] = "prettier --check 'src/**/*.{js,scss,ts}'"
     json.scripts['prettier:fix'] = "prettier --write 'src/**/*.{js,scss,ts}'"
 
