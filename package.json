@@ -1,13 +1,17 @@
 {
   "name": "linting",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Linting presets for Intracto internal code",
-  "main": "index.js",
+  "main": "bin/index.js",
+  "bin": {
+    "linting": "bin/index.js"
+  },
   "author": "Intracto",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "@typescript-eslint/eslint-plugin": "2.7.0",
     "@typescript-eslint/parser": "2.7.0",
+    "chalk": "3.0.0",
     "eslint": "6.1.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-config-prettier": "6.5.0",
