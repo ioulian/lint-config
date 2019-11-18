@@ -3,4 +3,8 @@ export default class Test {
     console.log(str)
     str.toString()
   }
+
+  hello(str): void {
+    console.log(str)
+  }
 }
