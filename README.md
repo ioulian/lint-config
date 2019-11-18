@@ -26,9 +26,14 @@ Copy the file `./js/.eslintrc.json` to your project root if you are using Javasc
 
 Copy the file `./ts/.eslintrc.json` to your project root if you are using TypeScript in your project.
 
+### Mixed TS and JS codebases
+
+If you use JS and TS in a single codebase, you can copy the `.eslintrc.json` to correct directory.
+For example, copy `./ts/.eslintrc.json` in your `./src/ts/` folder and `./js/.eslintrc.json` into `./src/js/`.
+
 ## VSCode extensions
 
-You can install VSCode extensions for Prittier, Stylelint and ESLint. Make sure you change the config for "format on save" to true. This will automatically format your code.
+You can install VSCode extensions for Prittier, Stylelint and ESLint. Make sure you change the config for "format on save" to true: `"editor.formatOnSave": true`. This will automatically format your code when you save.
 
 ## TODO
 
@@ -36,3 +41,4 @@ You can install VSCode extensions for Prittier, Stylelint and ESLint. Make sure 
 - Check what rules we need to update
 - Update `.editorconfig` for `.php` files and more
 - Add precommit hooks to fix/lint files.
+- Define folder structure for code
