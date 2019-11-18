@@ -6,27 +6,43 @@ This repository contains sample linting configs for .scss, .js and .ts files. Cu
 
 ## How to use
 
-### Installing
+### Installing (automatic)
+
+To install this repo, run:
+
+```bash
+yarn add https://github.com/ioulian/lint-config
+```
+
+When the dependency has been installed, run:
+
+```bash
+yarn linting install
+```
+
+This will install all linting configs for you and update `package.json` with scripts.
+
+### Installing (Manual)
 
 Copy all dev dependencies from `package.json` and copy to your own `package.json`. Don't forget to run `yarn install`.
 
-### Base
+#### Base
 
 Copy `.editorconfig`, `.nvmrc` and `.prettierrc.json` to your project root. Copy also all the needed scripts from `package.json` to run the linting and autofixing the problems. Do not forget to change the paths.
 
-### SCSS
+#### SCSS
 
 Copy the file `./scss/.stylelintrc.json` to your project root.
 
-### JS
+#### JS
 
 Copy the file `./js/.eslintrc.json` to your project root if you are using Javascript in your project.
 
-### TS
+#### TS
 
 Copy the file `./ts/.eslintrc.json` to your project root if you are using TypeScript in your project.
 
-### Mixed TS and JS codebases
+#### Mixed TS and JS codebases
 
 If you use JS and TS in a single codebase, you can copy the `.eslintrc.json` to correct directory.
 For example, copy `./ts/.eslintrc.json` in your `./src/ts/` folder and `./js/.eslintrc.json` into `./src/js/`.
@@ -41,4 +57,5 @@ You can install VSCode extensions for Prittier, Stylelint and ESLint. Make sure 
 - Check what rules we need to update
 - Update `.editorconfig` for `.php` files and more
 - Add precommit hooks to fix/lint files.
-- Define folder structure for code
+- publish to npm
+- give ownership to Intracto

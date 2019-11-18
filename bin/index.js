@@ -4,47 +4,54 @@ const destPath = process.env.INIT_CWD
 const fs = require('fs')
 const chalk = require('chalk')
 
-const copyFile = (from, to, message) => {
+const copyFile = (from, to, message, resolve, reject) => {
   fs.copyFile(require.resolve(from), `${destPath}${to}`, err => {
     if (err) {
+      reject()
       throw err
     }
 
     console.log(message)
+    resolve()
   })
 }
 
 const installFile = (from, to, message) => {
-  if (fs.existsSync(destPath)) {
-    /* eslint-disable */
-    const readline = require('readline')
-    /* eslint-enable */
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    })
+  return new Promise((resolve, reject) => {
+    if (fs.existsSync(destPath)) {
+      /* eslint-disable */
+      const readline = require('readline')
+      /* eslint-enable */
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      })
 
-    rl.question(
-      `${chalk.bold(
-        to
-      )} file already exists, do you want to override it? ${chalk.yellow(
-        '(yes/no)'
-      )} `,
-      answer => {
-        if (['y', 'yes'].includes(answer)) {
-          copyFile(
-            from,
-            to,
-            `${chalk.green('✓')} ${chalk.bold(to)} overridden.`
-          )
+      rl.question(
+        `${chalk.bold(
+          to
+        )} file already exists, do you want to override it? ${chalk.yellow(
+          '(yes/no)'
+        )} `,
+        answer => {
+          rl.close()
+          if (['y', 'yes'].includes(answer)) {
+            copyFile(
+              from,
+              to,
+              `${chalk.green('✓')} ${chalk.bold(to)} overridden.`,
+              resolve,
+              reject
+            )
+          } else {
+            resolve()
+          }
         }
-
-        rl.close()
-      }
-    )
-  } else {
-    copyFile(from, to, message)
-  }
+      )
+    } else {
+      copyFile(from, to, message, resolve, reject)
+    }
+  })
 }
 
 const addScriptsToPackageJson = message => {
@@ -97,7 +104,7 @@ const addScriptsToPackageJson = message => {
   })
 }
 
-if (process.argv.includes('install')) {
+const install = async () => {
   // Create needed folders
   fs.mkdirSync(`${destPath}/src/js`, {
     recursive: true,
@@ -110,32 +117,32 @@ if (process.argv.includes('install')) {
   })
 
   // Copy all listing files
-  installFile(
+  await installFile(
     './../.editorconfig',
     '/.editorconfig',
     `${chalk.green('✓')} ${chalk.bold('.editorconfig')} file created.`
   )
-  installFile(
+  await installFile(
     './../.nvmrc',
     '/.nvmrc',
     `${chalk.green('✓')} ${chalk.bold('.nvmrc')} file created.`
   )
-  installFile(
+  await installFile(
     './../.prettierrc.json',
     '/.prettierrc.json',
     `${chalk.green('✓')} ${chalk.bold('.prettierrc.json')} file created.`
   )
-  installFile(
+  await installFile(
     './../scss/.stylelintrc.json',
     '/src/scss/.stylelintrc.json',
     `${chalk.green('✓')} ${chalk.bold('.stylelintrc.json')} file created.`
   )
-  installFile(
+  await installFile(
     './../js/.eslintrc.json',
     '/src/js/.eslintrc.json',
     `${chalk.green('✓')} ${chalk.bold('.eslintrc.json')} file created.`
   )
-  installFile(
+  await installFile(
     './../ts/.eslintrc.json',
     '/src/ts/.eslintrc.json',
     `${chalk.green('✓')} ${chalk.bold('.eslintrc.json')} file created.`
@@ -147,4 +154,8 @@ if (process.argv.includes('install')) {
       'package.json'
     )} updated with linting scripts.`
   )
+}
+
+if (process.argv.includes('install')) {
+  install()
 }
