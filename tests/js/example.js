@@ -1,4 +1,4 @@
-;(function init() {
+;(function() {
+  test()
   console.log('hi')
-  console.log(2 === 3)
-})()
+})

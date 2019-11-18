@@ -1,6 +1,6 @@
 {
   "name": "linting",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Linting presets for Intracto internal code",
   "keywords": [
     "eslint",

@@ -91,6 +91,16 @@ const addScriptsToPackageJson = message => {
     json.scripts['prettier:lint'] = "prettier --check 'src/**/*.{js,scss,ts}'"
     json.scripts['prettier:fix'] = "prettier --write 'src/**/*.{js,scss,ts}'"
 
+    if (typeof json.husky === 'undefined') {
+      json.husky = {}
+    }
+
+    if (typeof json.husky.hooks === 'undefined') {
+      json.husky.hooks = {}
+    }
+
+    json.husky.hooks['pre-commit'] = 'yarn prettier:lint'
+
     fs.writeFile(
       `${destPath}/package.json`,
       JSON.stringify(json, null, 2),
