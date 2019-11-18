@@ -18,7 +18,7 @@ const copyFile = (from, to, message, resolve, reject) => {
 
 const installFile = (from, to, message) => {
   return new Promise((resolve, reject) => {
-    if (fs.existsSync(destPath)) {
+    if (fs.existsSync(`${destPath}${to}`)) {
       /* eslint-disable */
       const readline = require('readline')
       /* eslint-enable */
