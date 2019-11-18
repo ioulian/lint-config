@@ -1,8 +1,10 @@
+#!/usr/bin/env node
+
 const destPath = process.env.INIT_CWD
 const fs = require('fs')
 const chalk = require('chalk')
 
-const installFile = (from, to, message) => {
+const copyFile = (from, to, message) => {
   fs.copyFile(require.resolve(from), `${destPath}${to}`, err => {
     if (err) {
       throw err
@@ -12,28 +14,102 @@ const installFile = (from, to, message) => {
   })
 }
 
+const installFile = (from, to, message) => {
+  if (fs.existsSync(destPath)) {
+    /* eslint-disable */
+    const readline = require('readline')
+    /* eslint-enable */
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    })
+
+    rl.question(
+      `${chalk.bold(
+        to
+      )} file already exists, do you want to override it? ${chalk.yellow(
+        '(yes/no)'
+      )} `,
+      answer => {
+        if (['y', 'yes'].includes(answer)) {
+          copyFile(
+            from,
+            to,
+            `${chalk.green('✓')} ${chalk.bold(to)} overridden.`
+          )
+        }
+
+        rl.close()
+      }
+    )
+  } else {
+    copyFile(from, to, message)
+  }
+}
+
 const addScriptsToPackageJson = message => {
-  fs.readFile(`${destPath}/package.json`, (err, data) => {
+  fs.copyFile(
+    `${destPath}/package.json`,
+    `${destPath}/package.json.bak`,
+    err => {
+      if (err) {
+        throw err
+      }
+
+      console.log(
+        `${chalk.green('✓')} ${chalk.bold(
+          'package.json'
+        )} backed up to ${chalk.bold('package.json.bak')}.`
+      )
+    }
+  )
+
+  fs.readFile(`${destPath}/package.json`, 'utf8', (errRead, data) => {
+    if (errRead) {
+      throw errRead
+    }
+
     const json = JSON.parse(data)
 
-    json.scripts['eslint:lint:js'] = "eslint '**/*.js' --config ./js/index.js"
-    json.scripts['eslint:fix:js'] =
-      "eslint --fix '**/*.js' --config ./js/index.js"
-    json.scripts['eslint:lint:ts'] = "eslint '**/*.ts' --config ./ts/index.js"
-    json.scripts['eslint:fix:ts'] =
-      "eslint --fix '**/*.ts' --config ./ts/index.js"
-    json.scripts['stylelint:lint'] = "stylelint '**/*.scss'"
-    json.scripts['stylelint:fix'] = "stylelint --fix '**/*.scss'"
-    json.scripts['prettier:lint'] = "prettier --check '**/*.{js,scss,ts}'"
-    json.scripts['prettier:fix'] = "prettier --write '**/*.{js,scss,ts}'"
+    if (typeof json.scripts === 'undefined') {
+      json.scripts = {}
+    }
 
-    fs.writeFile(`${destPath}/package.json`, JSON.stringify(data), () => {
-      console.log(message)
-    })
+    json.scripts['eslint:lint:js'] = "eslint 'src/js/**/*.js'"
+    json.scripts['eslint:fix:js'] = "eslint --fix 'src/js/**/*.js'"
+    json.scripts['eslint:lint:ts'] = "eslint 'src/ts/**/*.ts'"
+    json.scripts['eslint:fix:ts'] = "eslint --fix 'src/ts/**/*.ts'"
+    json.scripts['stylelint:lint'] = "stylelint 'src/scss/**/*.scss'"
+    json.scripts['stylelint:fix'] = "stylelint --fix 'src/scss/**/*.scss'"
+    json.scripts['prettier:lint'] = "prettier --check 'src/**/*.{js,scss,ts}'"
+    json.scripts['prettier:fix'] = "prettier --write 'src/**/*.{js,scss,ts}'"
+
+    fs.writeFile(
+      `${destPath}/package.json`,
+      JSON.stringify(json, null, 2),
+      errWrite => {
+        if (errWrite) {
+          throw errWrite
+        }
+        console.log(message)
+      }
+    )
   })
 }
 
 if (process.argv.includes('install')) {
+  // Create needed folders
+  fs.mkdirSync(`${destPath}/src/js`, {
+    recursive: true,
+  })
+  fs.mkdirSync(`${destPath}/src/ts`, {
+    recursive: true,
+  })
+  fs.mkdirSync(`${destPath}/src/scss`, {
+    recursive: true,
+  })
+
+  // Copy all listing files
   installFile(
     './../.editorconfig',
     '/.editorconfig',
@@ -44,25 +120,28 @@ if (process.argv.includes('install')) {
     '/.nvmrc',
     `${chalk.green('✓')} ${chalk.bold('.nvmrc')} file created.`
   )
-  // generate config json file from js
+  installFile(
+    './../.prettierrc.json',
+    '/.prettierrc.json',
+    `${chalk.green('✓')} ${chalk.bold('.prettierrc.json')} file created.`
+  )
   installFile(
     './../scss/.stylelintrc.json',
     '/src/scss/.stylelintrc.json',
     `${chalk.green('✓')} ${chalk.bold('.stylelintrc.json')} file created.`
   )
-  // generate config json file from js
   installFile(
     './../js/.eslintrc.json',
     '/src/js/.eslintrc.json',
     `${chalk.green('✓')} ${chalk.bold('.eslintrc.json')} file created.`
   )
-  // generate config json file from js
   installFile(
     './../ts/.eslintrc.json',
     '/src/ts/.eslintrc.json',
     `${chalk.green('✓')} ${chalk.bold('.eslintrc.json')} file created.`
   )
 
+  // Add linting scripts to original package.json
   addScriptsToPackageJson(
     `${chalk.green('✓')} ${chalk.bold(
       'package.json'
