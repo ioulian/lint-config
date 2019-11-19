@@ -17,10 +17,25 @@ yarn add https://github.com/ioulian/lint-config
 When the dependency has been installed, run:
 
 ```bash
-yarn linting install
+yarn lint-config install
 ```
 
 This will install all linting configs for you and update `package.json` with scripts. You can lint and fix your code with them.
+
+#### Commit hooks
+
+The `install` command also adds husky config into your `package.json` file. If you want to use pre-commit hooks, you can install husky for that.
+
+```bash
+yarn add husky
+```
+
+Using the config from `package.json` it will lint the code before the commit (blocking the commit if the code is not properly linted).
+If you want to remove the commit hooks, just run this
+
+```bash
+yarn remove husky
+```
 
 ### Installing (Manual)
 
