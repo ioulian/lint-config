@@ -68,6 +68,7 @@ You can install VSCode extensions for Prittier, Stylelint and ESLint. Make sure 
 
 ## TODO
 
+- The extends and parsers need to be in the package.json of the project
 - Check how to make unified `.eslintrc.json` for JS and TS codebases
 - Check what rules we need to update
 - Update `.editorconfig` for `.php` files and more
